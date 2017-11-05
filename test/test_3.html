@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>class与style绑定</title>
+		<style type="text/css">
+		div{
+			width:30px;
+			height: 40px;
+		}
+			.static{
+		    background: black;
+					}
+			.active{
+			background: red;
+			}
+			.text-danger{
+			border: 1px solid gray;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="cvm" v-bind:class="{active:isActive}"></div>
+		<div id="cvm2" class="static" v-bind:class="{active:isActive,'text-danger':hasError}"></div>
+		<div id="cvm3" v-bind:class="classObject"></div>
+		<div id="cvm4" v-bind:class="[activeClass,errorClass]"></div>
+		<!-- <div id="cvm4" v-bind:class="[isActive?activeClass:'',errorClass]"></div> -->
+		<!-- <div id="cvm4" v-bind:class="[{active:isActive},errorClass]"></div> -->
+		<div id="cvm5"><my-component class="baz boo"></my-component></div>	
+		<div id="cvm6" v-bind:style="{color:activeColor,fontSize:fontSize+'px'}">对</div>
+		<div id="cvm7" v-bind:style="styleObject">对</div>
+		<script type="text/javascript" src="https://unpkg.com/vue"></script>
+		<script>
+		var vm=new Vue({
+			el:"#cvm",
+			data:{
+				isActive:true,
+			}
+		})
+		var vm2=new Vue({
+			el:"#cvm2",
+			data:{
+				isActive:true,
+				hasError:false
+			}
+			})
+		var vm3=new Vue({
+			el:"#cvm3",
+			data:{
+				isActive:true,
+				error:null
+			},
+			computed:{
+				classObject:function(){
+					return{
+						active:this.isActive&&!this.error,
+						'text-danger':this.error&&this.error.type==='fatal'
+					}
+				}
+			}
+		})
+		var vm4=new Vue({
+			el:"#cvm4",
+			data:{
+				activeClass:'active',
+				errorClass:'text-danger'
+			}
+			})
+		Vue.component('my-component', {
+		template: '<p class="foo bar">Hi</p>'
+		})
+		var vm5=new Vue({
+			el:"#cvm5"
+		})
+		var vm6=new Vue({
+			el:"#cvm6",
+			data:{
+				activeColor:'red',
+				fontSize:30
+			}
+		})
+		var vm7=new Vue({
+			el:"#cvm7",
+			data:{
+				styleObject:{
+					color:'red',
+					fontSize:'13px'
+				}
+			}
+		})
+		</script>
+	</body>
+</html>

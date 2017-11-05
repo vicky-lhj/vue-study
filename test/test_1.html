@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>声明式渲染/条件与循环/处理用户输入/组件化应用构建</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<h3>声明式渲染</h3>
+	<div id="app">
+		{{message}}
+	</div>
+	<div id="app-2">
+		<span v-bind:title="message">
+			鼠标悬停几秒查看此处动态绑定信息！
+		</span>
+	</div>
+	<p></p>
+	<span>====================================</span>
+	<h3>条件与循环</h3>
+	<div id="app-3">
+		<p v-if="seen">现在你看见我了</p>
+	</div>
+	<div id="app-4">
+		<ol>
+			<li v-for="todo in todos">
+			{{todo.text}}            
+		    </li>
+		</ol>
+	</div>
+	<p></p>
+	<span>====================================</span>
+	<h3>处理用户输入</h3>
+	<div id="app-5">
+		<p>{{message}}</p>
+		<button v-on:click="reverseMessage">逆转消息</button>
+	</div>
+	<div id="app-6">
+		<p>{{message}}</p>
+		<input v-model="message">
+	</div>
+	<p></p>
+	<span>====================================</span>
+	<h3>组件化应用构建</h3>
+	<div id="app-7">
+	<ol>
+		<!--
+		现在我们为每个 todo-item 提供 todo 对象
+		todo 对象是变量，即其内容可以是动态的。
+		我们也需要为每个组件提供一个“key”
+        -->
+		<!--创建一个 todo-item 组件的实例 -->
+		<todo-item 
+		v-for="item in groceryList"
+		v-bind:todo="item"
+		v-bind:key="item.id">
+		</todo-item>
+	</ol>		
+	</div>
+	<script type="text/javascript" src="https://unpkg.com/vue"></script>
+	<script>
+		var app=new Vue({
+			el:'#app',
+			data:{
+				message:'hello vue!'
+			}
+		})
+		var app2=new Vue({
+			el:'#app-2',
+			data:{
+				message:'页面加载于 '+new Date().toLocaleString()
+			}
+		})
+		var app3=new Vue({
+			el:'#app-3',
+			data:{
+				seen:true
+			}
+		})
+		var app4=new Vue({
+			el:"#app-4",
+            data:{
+            	todos:[
+            	{text:'学习 javascript'},
+            	{text:'学习 Vue'},
+            	{text:'整个牛项目'}
+            	]
+            }
+		})
+		var app5=new Vue({
+			el:'#app-5',
+			data:{
+				message:'Hello Vue.js'
+			},
+			methods:{
+				reverseMessage:function(){
+					this.message=this.message.split('').reverse().join('')
+				}
+			}
+		})
+		var app6=new Vue({
+			el:'#app-6',
+			data:{
+				message:'hello vue!'
+			}
+		})
+		//定义名为 todo-item 的新组建
+		Vue.component('todo-item',{
+			//todo-item 组件现在接受一个
+			//“prop”,类似于一个自定义属性
+			//这个属性名为 todo
+			props:['todo'],
+			template:'<li>{{ todo.text }}</li>'
+		})	
+		var app7=new Vue({
+			el:'#app-7',
+			data:{
+				groceryList:[
+				{id:0,text:"蔬菜"},
+				{id:1,text:"奶酪"},
+				{id:2,text:"苹果"}
+				]
+			}
+		})	
+	</script>
+</body>
+</html>
